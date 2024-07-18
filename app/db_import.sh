@@ -7,6 +7,7 @@ function db_import() {
   #------------------------------------------------------------------------^ Formatting will strip this space, keep it!!
   echo 'Importing DB'
   wp db reset --yes
+  sed -i "1{/999999.*sandbox/d}" dump.sql
   wp db import dump.sql
   # cleanup
   rm dump.sql
