@@ -27,6 +27,7 @@ source ${SCRIPT_PATH}/app/sync_files.sh
 source ${SCRIPT_PATH}/app/sync_uploads.sh
 source ${SCRIPT_PATH}/app/update_wp_config.sh
 source ${SCRIPT_PATH}/app/validate_variables.sh
+source ${SCRIPT_PATH}/app/wp_cli_shorthands.sh
 
 ARG_SYNC_UPLOADS=0
 ARG_SYNC_DB=9
@@ -35,6 +36,7 @@ ARG_SYNC_FILES=9
 process_flags $@
 setup_connection_vars
 validate_variables
+wp_cli_shorthands
 
 SYNC_START_TIME=$(date +%s)
 

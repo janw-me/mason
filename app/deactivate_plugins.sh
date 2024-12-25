@@ -39,14 +39,14 @@ function deactivate_plugins() {
     PLUGIN_LIST+=" $plugin"
   done
 
-  if ! wp core is-installed --network; then
-      wp plugin deactivate ${PLUGIN_LIST} --skip-plugins --skip-themes
+  if ! ${WP_CLI_Localy_Quick} core is-installed --network; then
+      ${WP_CLI_Localy_Quick} plugin deactivate ${PLUGIN_LIST}
       return; # don't check further.
   fi
 
-  wp plugin deactivate ${PLUGIN_LIST} --skip-plugins --skip-themes --network
+  ${WP_CLI_Localy_Quick} plugin deactivate ${PLUGIN_LIST} --network
   # loop over all sites.
-  for site in $(wp site list --field=url --format=csv); do
-    wp plugin deactivate ${PLUGIN_LIST} --skip-plugins --skip-themes --url=$site
+  for site in $(${WP_CLI_Localy_Quick} site list --field=url --format=csv); do
+    ${WP_CLI_Localy_Quick} plugin deactivate ${PLUGIN_LIST} --url=$site
   done
 }
