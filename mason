@@ -47,6 +47,7 @@ fi
 
 # Database & Extras sync.
 if [[ ${ARG_SYNC_DB} == 1 ]]; then
+  db_import_tables
   db_import
   replace_url
   update_wp_config

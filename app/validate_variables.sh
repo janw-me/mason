@@ -60,14 +60,21 @@ function validate_multisite() {
 
   # Iterate over the keys and values
   for ((i=0; i<${#BLOG_ID[@]}; i++)); do
-    echo -e " ${C_GRN}${BLOG_ID[i]}${C_OFF}: ${C_ORN}${SITE_URL[i]}${C_OFF}"
+    if [[ ${BLOG_ID[i]} == '1' ]]; then
+      echo -e " ${C_OFF}${BLOG_ID[i]}${C_OFF}: ${C_OFF}${SITE_URL[i]}${C_OFF} ${C_RED}(Main site is a full sync)${C_OFF}"
+    else
+      echo -e " ${C_GRN}${BLOG_ID[i]}${C_OFF}: ${C_ORN}${SITE_URL[i]}${C_OFF}"
+    fi
   done
   echo -e ''
 
   while true; do
-    read -p "$(echo -e Enter ${C_ORN}b_blog_id${C_OFF} subsite to sync a single site, ${C_ORN}empty${C_OFF} for all:) " b_ID
+    read -p "$(echo -e Enter ${C_ORN}blog_id${C_OFF} subsite to sync a single site, ${C_ORN}empty${C_OFF} for all:) " b_ID
     
-    if [[ -z "$b_ID" ]]; then
+    if [[ -z "${b_ID}" ]]; then
+      echo -e "Syncing ${C_ORN}all${C_OFF} subsites."
+      break
+    elif [[ "${b_ID}" == '1' ]]; then
       echo -e "Syncing ${C_ORN}all${C_OFF} subsites."
       break
     elif [[ ! " ${BLOG_ID[@]} " =~ " ${b_ID} " ]]; then
@@ -75,17 +82,13 @@ function validate_multisite() {
     else
       # get array key
       for ((i=0; i<${#BLOG_ID[@]}; i++)); do
-        if [[ "${BLOG_ID[i]}" == "$b_ID" ]]; then
+        if [[ "${BLOG_ID[i]}" == "${b_ID}" ]]; then
           break
         fi
       done
       echo -e "Syncing subsite ${C_GRN}${b_ID}${C_OFF} ${C_ORN}${SITE_URL[i]}${C_OFF}"
-
       SUB_SITE="${SITE_URL[i]}"
-
-      echo $SUB_SITE
-
-
+      SUB_SITE_ID="${b_ID}}"
       break
     fi
 

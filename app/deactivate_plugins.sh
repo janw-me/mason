@@ -39,6 +39,13 @@ function deactivate_plugins() {
     PLUGIN_LIST+=" $plugin"
   done
 
+  # if subsite, only check that, and network.
+  if [[ ! -z "$SUB_SITE" ]]; then
+    ${WP_CLI_Localy_Quick} plugin deactivate ${PLUGIN_LIST}
+    ${WP_CLI_Localy_Quick_SubSite} plugin deactivate ${PLUGIN_LIST} --network
+    return
+  fi
+
   if ! ${WP_CLI_Localy_Quick} core is-installed --network; then
       ${WP_CLI_Localy_Quick} plugin deactivate ${PLUGIN_LIST}
       return; # don't check further.
