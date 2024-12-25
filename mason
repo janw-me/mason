@@ -5,9 +5,9 @@ SCRIPT_PATH=$(
   cd "$(dirname "$0")"
   pwd -P
 ) # no tailing slash
-SCRIPT_VERSION='1.5.1'
-SCRIPT_VERSION_NAME='Omastar'   # https://en.wikipedia.org/wiki/List_of_generation_I_Pok%C3%A9mon
-C_VERSION="\033[38;5;111m"      # http://colors.sh/
+SCRIPT_VERSION='1.6.0'
+SCRIPT_VERSION_NAME='Pikachu'   # https://en.wikipedia.org/wiki/List_of_generation_I_Pok%C3%A9mon
+C_VERSION="\033[38;5;226m"      # http://colors.sh/
 C_RED="\033[38;5;9m"
 C_GRN="\033[38;5;28m"
 C_ORN="\033[38;5;202m"
@@ -50,6 +50,7 @@ if [[ ${ARG_SYNC_DB} == 1 ]]; then
   db_import_tables
   db_import
   replace_url
+  wp_cli_shorthands_rerender
   update_wp_config
   deactivate_plugins
   set_passwords
@@ -62,6 +63,7 @@ echo -e "Sync took: ${C_ORN}$(readable_time $((SYNC_END_TIME - SYNC_START_TIME))
 if [[ ${ARG_SYNC_UPLOADS} == 1 ]]; then
   echo 'Syncing uploads, This might take a while.'
   echo 'The rest of the sync is done and usable.'
+  wp_cli_shorthands_rerender
   sync_uploads
   SYNC_UPLOAD_TIME=$(date +%s)
   echo -e "Uploads sync took: ${C_ORN}$(readable_time $((SYNC_UPLOAD_TIME - SYNC_END_TIME)))${C_OFF}"

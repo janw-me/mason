@@ -88,7 +88,7 @@ function validate_multisite() {
       done
       echo -e "Syncing subsite ${C_GRN}${b_ID}${C_OFF} ${C_ORN}${SITE_URL[i]}${C_OFF}"
       SUB_SITE="${SITE_URL[i]}"
-      SUB_SITE_ID="${b_ID}}"
+      SUB_SITE_ID="${b_ID}"
       break
     fi
 

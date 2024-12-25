@@ -9,8 +9,19 @@ function sync_uploads() {
     PORT="-e 'ssh -p ${LIVE_SSH_PORT}'"
   fi
 
-  LIVE_UPLOADS_DIR=$(wp @live eval 'echo wp_get_upload_dir()["basedir"];')
-  LOCAL_UPLOADS_DIR=$(wp eval 'echo wp_get_upload_dir()["basedir"];')
 
-  eval "rsync ${PORT} ${LIVE_SSH_SERVER}:${LIVE_UPLOADS_DIR%/}/ ${LOCAL_UPLOADS_DIR/}/ ${EXCLUDES} --delete -Pqavz"
+  REMOTE_UPLOADS_DIR=$(${WP_CLI_Remote_Fully_SubSite} eval 'echo wp_get_upload_dir()["basedir"];')
+  LOCALY_UPLOADS_DIR=$(${WP_CLI_Localy_Fully_SubSite} eval 'echo wp_get_upload_dir()["basedir"];')
+
+  # Root protection
+  if [[ -z "${LOCALY_UPLOADS_DIR}" ]]; then
+    echo "Local uploads dir empty, aborting."
+    return
+  fi
+  if [[ -z "${REMOTE_UPLOADS_DIR}" ]]; then
+    echo "Remote uploads dir empty, aborting."
+    return
+  fi
+
+  eval "rsync ${PORT} ${LIVE_SSH_SERVER}:${REMOTE_UPLOADS_DIR%/}/ ${LOCALY_UPLOADS_DIR/}/ --delete -Pqavz"
 }

@@ -35,6 +35,7 @@ function db_import() {
 function db_import_tables() {
   if [[ -z "$SUB_SITE" ]]; then
     TARGET_TABLES=''
+    TARGET_TABLES_SHORT=''
   fi
 
   # get all tables with the prefix.
@@ -47,10 +48,10 @@ function db_import_tables() {
   fi
 
   NETWORK_TABLES="${MAIN_PREFIX}usermeta,${MAIN_PREFIX}users,${MAIN_PREFIX}signups,${MAIN_PREFIX}site,${MAIN_PREFIX}sitemeta,${MAIN_PREFIX}blogmeta,${MAIN_PREFIX}blogs"
-  SUB_TABLES=$(${WP_CLI_Remote_Quick} db query "SHOW TABLES LIKE '${SUB_PREFIX}%';" --silent --skip-column-names | tr '\n' ',')
+  SUB_TABLES=$(${WP_CLI_Remote_Quick} db query "SHOW TABLES LIKE '${SUB_PREFIX}%';" --silent --skip-column-names | tr '\n' ',' | sed 's/,$//')
 
   echo -e "  Importing tables: ${C_ORN}${SUB_TABLES}${C_GRN}${NETWORK_TABLES}${C_OFF}"
 
-  TARGET_TABLES="${SUB_TABLES}${NETWORK_TABLES}"
-  
+  TARGET_TABLES="${SUB_TABLES},${NETWORK_TABLES}"
+  TARGET_TABLES_SHORT="${SUB_PREFIX}*,${NETWORK_TABLES}"
 }
